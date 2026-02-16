@@ -1,6 +1,7 @@
 
 # GeniTree
 ### Your genetic family tree
+_Try the deployed app [via this link](https://genitree-real.vercel.app/)._
 
 GeniTree is a project I built with Lavanya Arora and [Darcy Yang](https://www.linkedin.com/in/darcy-yang-5b70472a5/) at the Lumina.House x ThradAI x Vercel hackathon of 15Feb 2026.
 
