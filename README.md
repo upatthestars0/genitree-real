@@ -1,3 +1,19 @@
+
+# GeniTree
+### Your genetic family tree
+
+GeniTree is a project I built with Lavanya Arora and Darcy Yang at the Lumina.House x ThradAI x Vercel hackathon of 15Feb 2026.
+
+The problem we solve is the lack of centralisation in hereditary health data. Most medical symptoms and risk of certain diseases (for ourselves/children) are linked to hereditary factors. With GeniTree, we proposed a digitised family health history, with the integration of the Google API to "speak to your data" with gemini. 
+
+Examples GeniTree can help with:
+1. prevention: planning certain medical tests early if there is a specific disease risk in your family
+2. understanding if symptoms could be chronic or due to genetic factors as opposed to temporary
+3. learning about potential risks that children could be exposed to (genetic compatibility)
+4. etc.
+
+------------------------------------------------------------------------------
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
