@@ -4,6 +4,7 @@
 _Try the deployed app [via this link](https://genitree-real.vercel.app/)._
 
 GeniTree is a project I built with Lavanya Arora and [Darcy Yang](https://www.linkedin.com/in/darcy-yang-5b70472a5/) at the Lumina.House x ThradAI x Vercel hackathon of 15Feb 2026.
+LinkedIn post here: https://www.linkedin.com/posts/lina-tlemcani-68a8ba1b0_london-claudecode-startup-activity-7430632233545232384--St2
 
 The problem we solve is the lack of centralisation in hereditary health data. Most medical symptoms and risk of certain diseases (for ourselves/children) are linked to hereditary factors. With GeniTree, we proposed a digitised family health history, with the integration of the Google API to "speak to your data" with gemini. 
 
