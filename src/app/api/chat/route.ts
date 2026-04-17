@@ -10,7 +10,12 @@ function buildSystemPrompt(profile: Record<string, unknown> | null, familyMember
   const name = profile?.name ?? "the user";
   const age = profile?.age ? `${profile.age} years old` : "unknown age";
   const sex = profile?.sex ?? "unknown sex";
-  const lifestyle = profile?.lifestyle ?? "unknown lifestyle";
+  const lifestyleRaw = profile?.lifestyle ?? null;
+  let lifestyle = "unknown";
+  try {
+    const l = lifestyleRaw ? JSON.parse(lifestyleRaw as string) : null;
+    if (l) lifestyle = `exercise: ${l.exercise || "unknown"}, smoking: ${l.smoking || "unknown"}, alcohol: ${l.alcohol || "unknown"}, diet: ${l.diet || "unknown"}`;
+  } catch { lifestyle = lifestyleRaw as string ?? "unknown"; }
 
   const familySummary = familyMembers.length > 0
     ? familyMembers.map((m) => {
@@ -18,13 +23,19 @@ function buildSystemPrompt(profile: Record<string, unknown> | null, familyMember
         const status = m.is_alive
           ? `age ${m.age ?? "unknown"}`
           : `deceased at age ${m.age_at_death ?? "unknown"}${m.cause_of_death ? `, cause: ${m.cause_of_death}` : ""}`;
-        return `- ${m.relation} (${status}): ${conditions}`;
+        const lifestyle = [
+          m.smoking && m.smoking !== "never" ? `smoking: ${m.smoking}` : null,
+          m.alcohol && m.alcohol !== "none" ? `alcohol: ${m.alcohol}` : null,
+        ].filter(Boolean).join(", ");
+        const notes = (m as Record<string, unknown>).notes as string | null;
+        return `- ${m.relation} (${status}): ${conditions}${lifestyle ? ` | ${lifestyle}` : ""}${notes ? ` | notes: ${notes}` : ""}`;
       }).join("\n")
     : "No family members recorded.";
 
   const ownConditions = (healthHistory?.current_conditions as string[] | null)?.join(", ") || "none";
   const medications = (healthHistory?.medications as string[] | null)?.join(", ") || "none";
   const allergies = (healthHistory?.allergies as string[] | null)?.join(", ") || "none";
+  const userNotes = (profile as Record<string, unknown>)?.notes as string | null;
 
   return `You are GeniTree, a personal health advisor who knows the user's full family health history. You reason like a knowledgeable clinician — drawing on evidence-based medical guidelines (similar to UpToDate or OpenEvidence) to give specific, contextual answers.
 
@@ -40,7 +51,7 @@ ${familySummary}
 ## Their personal health
 - Current conditions: ${ownConditions}
 - Medications: ${medications}
-- Allergies: ${allergies}
+- Allergies: ${allergies}${userNotes ? `\n- Additional notes: ${userNotes}` : ""}
 
 ## Your behaviour
 - Always connect your answers to their specific family history when relevant

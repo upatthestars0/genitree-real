@@ -60,7 +60,10 @@ export default function OnboardingPage() {
   const [sex, setSex] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [lifestyle, setLifestyle] = useState("");
+  const [exercise, setExercise] = useState("");
+  const [smoking, setSmoking] = useState("");
+  const [alcohol, setAlcohol] = useState("");
+  const [diet, setDiet] = useState("");
 
   // Step 2 state
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([
@@ -150,7 +153,7 @@ export default function OnboardingPage() {
           sex,
           height,
           weight,
-          lifestyle,
+          lifestyle: JSON.stringify({ exercise, smoking, alcohol, diet }),
           onboarding_completed: true,
         })
         .eq("id", user.id);
@@ -322,26 +325,55 @@ export default function OnboardingPage() {
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Lifestyle</Label>
-              <Select value={lifestyle} onValueChange={setLifestyle}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select your lifestyle" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">
-                    Active (Exercise 3+ times/week)
-                  </SelectItem>
-                  <SelectItem value="moderate">
-                    Moderate (Some activity)
-                  </SelectItem>
-                  <SelectItem value="sedentary">
-                    Sedentary (Mostly sitting)
-                  </SelectItem>
-                  <SelectItem value="smoker">Smoker</SelectItem>
-                  <SelectItem value="social-drinker">Social Drinker</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Exercise</Label>
+                <Select value={exercise} onValueChange={setExercise}>
+                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sedentary">Sedentary</SelectItem>
+                    <SelectItem value="light">Light (2–4x/month)</SelectItem>
+                    <SelectItem value="moderate">Moderate (1–2x/week)</SelectItem>
+                    <SelectItem value="active">Active (3+/week)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Smoking</Label>
+                <Select value={smoking} onValueChange={setSmoking}>
+                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="never">Never</SelectItem>
+                    <SelectItem value="ex-smoker">Ex-smoker</SelectItem>
+                    <SelectItem value="occasional">Occasional</SelectItem>
+                    <SelectItem value="regular">Regular</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Alcohol</Label>
+                <Select value={alcohol} onValueChange={setAlcohol}>
+                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="social">Social</SelectItem>
+                    <SelectItem value="moderate">Moderate</SelectItem>
+                    <SelectItem value="heavy">Heavy</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Diet</Label>
+                <Select value={diet} onValueChange={setDiet}>
+                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="no-restrictions">No restrictions</SelectItem>
+                    <SelectItem value="vegetarian">Vegetarian</SelectItem>
+                    <SelectItem value="vegan">Vegan</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         )}

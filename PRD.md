@@ -91,6 +91,10 @@ The highest-intent moment is the 10 minutes after a medical consultation — whe
 
 ---
 
+## V0.5 Backlog (post-demo quick wins)
+- Conditions split into "current" vs "past" on family member cards
+- Free-text box on family member form — Claude parses it and auto-populates conditions (e.g. "had a heart attack at 60, takes metformin" → extracts conditions + medications)
+
 ## V1 Backlog
 
 - `data@genitree.com` email ingestion — forward GP results email → auto-parsed

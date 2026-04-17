@@ -4,10 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   TreePine,
-  LayoutDashboard,
-  Users,
   MessageCircle,
   TestTube,
+  Upload,
   Settings,
   LogOut,
   Menu,
@@ -18,11 +17,10 @@ import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Me" },
-  { href: "/dashboard/children", icon: Users, label: "My Children" },
-  { href: "/dashboard/ask", icon: MessageCircle, label: "Ask a question" },
   { href: "/dashboard/family-tree", icon: TreePine, label: "Family Tree" },
-  { href: "/dashboard/results", icon: TestTube, label: "Results" },
+  { href: "/dashboard/add-data", icon: Upload, label: "Add Data" },
+  { href: "/dashboard/recommendations", icon: TestTube, label: "Recommendations" },
+  { href: "/dashboard/chat", icon: MessageCircle, label: "Chat" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
