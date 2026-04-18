@@ -26,12 +26,18 @@ GeniTree is a hereditary health family tree app. V0 prototype being built for a 
 - Removed: Children, Medications, Ask pages (deleted from filesystem)
 
 ## What's been built (V0 status)
-- [x] Onboarding (3-step: about you, family history, personal health) — untouched, works
-- [x] Family Tree (visual, add/edit/remove members) — untouched, works
-- [x] Chat — rebuilt with Claude + family context system prompt
-- [ ] Add Data page — to build (file upload → Claude vision → save to Supabase)
-- [ ] Recommendations — to rebuild with Claude (currently hardcoded if/else rules)
-- [ ] Sidebar redirect: /dashboard → /dashboard/family-tree (default landing)
+- [x] Onboarding — 3-step flow, expanded relations list, 4-field lifestyle (exercise/smoking/alcohol/diet)
+- [x] Family Tree — visual layout, add/edit/remove, edit "You" card, click member to view their files in a sheet, smoking/alcohol/notes fields on family members
+- [x] Chat — rebuilt with Claude sonnet-4-6, family context + notes injected in system prompt
+- [x] Add Data — file upload (PDF/image) → Claude vision → structured extraction → confirm member → save to test_results
+- [x] Recommendations — Claude-powered with NICE/USPSTF guidelines, replaces hardcoded rules
+- [ ] Signup flow broken (user created manually in Supabase dashboard as workaround)
+- [ ] /dashboard redirect → should go to /dashboard/family-tree
+
+## DB changes made manually in Supabase SQL editor
+- family_members: added smoking, alcohol, notes columns
+- users: added notes column
+- test_results: created table (migration never ran automatically)
 
 ## PRD location
 `/PRD.md` in project root

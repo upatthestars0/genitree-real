@@ -41,12 +41,44 @@ const CONDITION_LABELS = ALL_CONDITIONS.map((c) => c.label);
 
 
 const RELATIONS = [
+  // Parents
   "Mother",
   "Father",
+  "Adoptive Mother",
+  "Adoptive Father",
+  "Stepmother",
+  "Stepfather",
+  // Siblings
   "Sister",
   "Brother",
-  "Son",
+  "Half-Sister",
+  "Half-Brother",
+  "Stepsister",
+  "Stepbrother",
+  // Children
   "Daughter",
+  "Son",
+  "Adopted Daughter",
+  "Adopted Son",
+  "Stepdaughter",
+  "Stepson",
+  // Grandparents
+  "Maternal Grandmother",
+  "Maternal Grandfather",
+  "Paternal Grandmother",
+  "Paternal Grandfather",
+  // Grandchildren
+  "Granddaughter",
+  "Grandson",
+  // Extended
+  "Aunt",
+  "Uncle",
+  "Niece",
+  "Nephew",
+  "Cousin",
+  // Partner
+  "Partner",
+  "Spouse",
 ];
 
 interface FamilyMember {
@@ -388,24 +420,31 @@ export default function FamilyTreeClient({
     }
   }
 
-  const grandparents = familyMembers.filter((m) =>
-    m.relation.includes("Grand")
+  const maternalGP = familyMembers.filter((m) => m.relation.includes("Maternal"));
+  const paternalGP = familyMembers.filter((m) => m.relation.includes("Paternal"));
+  const parents = familyMembers.filter((m) =>
+    ["Mother", "Father", "Adoptive Mother", "Adoptive Father", "Stepmother", "Stepfather"].includes(m.relation)
   );
-  const maternalGP = grandparents.filter((m) =>
-    m.relation.includes("Maternal")
+  const siblings = familyMembers.filter((m) =>
+    ["Sister", "Brother", "Half-Sister", "Half-Brother", "Stepsister", "Stepbrother"].includes(m.relation)
   );
-  const paternalGP = grandparents.filter((m) =>
-    m.relation.includes("Paternal")
+  const children = familyMembers.filter((m) =>
+    ["Daughter", "Son", "Adopted Daughter", "Adopted Son", "Stepdaughter", "Stepson"].includes(m.relation)
   );
-  const parents = familyMembers.filter(
-    (m) => m.relation === "Mother" || m.relation === "Father"
+  const grandchildren = familyMembers.filter((m) =>
+    ["Granddaughter", "Grandson"].includes(m.relation)
   );
-  const siblings = familyMembers.filter(
-    (m) => m.relation === "Sister" || m.relation === "Brother"
+  const partners = familyMembers.filter((m) =>
+    ["Partner", "Spouse"].includes(m.relation)
   );
-  const children = familyMembers.filter(
-    (m) => m.relation === "Son" || m.relation === "Daughter"
+  const extended = familyMembers.filter((m) =>
+    ["Aunt", "Uncle", "Niece", "Nephew", "Cousin"].includes(m.relation)
   );
+  const categorised = new Set([
+    ...maternalGP, ...paternalGP, ...parents, ...siblings,
+    ...children, ...grandchildren, ...partners, ...extended,
+  ].map((m) => m.id));
+  const other = familyMembers.filter((m) => !categorised.has(m.id));
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -534,6 +573,7 @@ export default function FamilyTreeClient({
                       member={m}
                       onEdit={() => openEdit(m)}
                       onRemove={() => handleRemove(m)}
+                      onView={() => openView(m)}
                     />
                   ))}
                 </div>
@@ -556,7 +596,68 @@ export default function FamilyTreeClient({
                       member={m}
                       onEdit={() => openEdit(m)}
                       onRemove={() => handleRemove(m)}
+                      onView={() => openView(m)}
                     />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Grandchildren */}
+          {grandchildren.length > 0 && (
+            <>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Grandchildren</p>
+                <div className="flex flex-wrap justify-center gap-8">
+                  {grandchildren.map((m) => (
+                    <MemberCard key={m.id} member={m} onEdit={() => openEdit(m)} onRemove={() => handleRemove(m)} onView={() => openView(m)} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Partners */}
+          {partners.length > 0 && (
+            <>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Partner / Spouse</p>
+                <div className="flex flex-wrap justify-center gap-8">
+                  {partners.map((m) => (
+                    <MemberCard key={m.id} member={m} onEdit={() => openEdit(m)} onRemove={() => handleRemove(m)} onView={() => openView(m)} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Extended family */}
+          {extended.length > 0 && (
+            <>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Extended Family</p>
+                <div className="flex flex-wrap justify-center gap-8">
+                  {extended.map((m) => (
+                    <MemberCard key={m.id} member={m} onEdit={() => openEdit(m)} onRemove={() => handleRemove(m)} onView={() => openView(m)} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Other / uncategorised */}
+          {other.length > 0 && (
+            <>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Other</p>
+                <div className="flex flex-wrap justify-center gap-8">
+                  {other.map((m) => (
+                    <MemberCard key={m.id} member={m} onEdit={() => openEdit(m)} onRemove={() => handleRemove(m)} onView={() => openView(m)} />
                   ))}
                 </div>
               </div>
@@ -731,6 +832,88 @@ export default function FamilyTreeClient({
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* View Sheet */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>
+              {sheetMember ? (sheetMember.name || sheetMember.relation) : (profile?.name || "You")}
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="mt-6 space-y-6">
+            {/* Conditions */}
+            {(sheetMember ? sheetMember.condition_list : []).length > 0 && (
+              <div>
+                <p className="mb-2 text-sm font-medium">Conditions</p>
+                <div className="flex flex-wrap gap-2">
+                  {(sheetMember?.condition_list ?? []).map((c) => (
+                    <span key={c} className="rounded-full bg-red-50 px-3 py-1 text-xs text-red-600">{c}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Notes */}
+            {sheetMember?.notes && (
+              <div>
+                <p className="mb-1 text-sm font-medium">Notes</p>
+                <p className="text-sm text-muted-foreground">{sheetMember.notes}</p>
+              </div>
+            )}
+
+            {/* Documents */}
+            <div>
+              <p className="mb-3 text-sm font-medium">Documents</p>
+              {sheetLoading ? (
+                <p className="text-sm text-muted-foreground">Loading...</p>
+              ) : sheetResults.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No documents uploaded yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {sheetResults.map((r) => {
+                    let parsed: { summary?: string; date?: string; conditions?: string[]; test_results?: { name: string; value: string; unit?: string; flag?: string }[] } = {};
+                    try { parsed = JSON.parse(r.content); } catch {}
+                    return (
+                      <div key={r.id} className="rounded-xl border bg-card p-4 space-y-3">
+                        <div className="flex items-start gap-2">
+                          <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                          <div>
+                            <p className="text-sm font-medium">{parsed.summary || "Document"}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {parsed.date || new Date(r.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        {parsed.conditions && parsed.conditions.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {parsed.conditions.map((c) => (
+                              <span key={c} className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] text-red-600">{c}</span>
+                            ))}
+                          </div>
+                        )}
+                        {parsed.test_results && parsed.test_results.length > 0 && (
+                          <div className="space-y-1">
+                            {parsed.test_results.map((t, i) => (
+                              <div key={i} className="flex justify-between text-xs">
+                                <span className="text-muted-foreground">{t.name}</span>
+                                <span className={t.flag === "high" || t.flag === "low" ? "font-semibold text-red-600" : ""}>
+                                  {t.value}{t.unit ? ` ${t.unit}` : ""}{t.flag ? ` (${t.flag})` : ""}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Edit Me Dialog */}
       <Dialog open={meDialogOpen} onOpenChange={setMeDialogOpen}>

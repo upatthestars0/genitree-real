@@ -31,12 +31,13 @@ const CONDITIONS = [
 ];
 
 const RELATIONS = [
-  "Mother",
-  "Father",
-  "Sister",
-  "Brother",
-  "Son",
-  "Daughter",
+  "Mother", "Father", "Adoptive Mother", "Adoptive Father", "Stepmother", "Stepfather",
+  "Sister", "Brother", "Half-Sister", "Half-Brother", "Stepsister", "Stepbrother",
+  "Daughter", "Son", "Adopted Daughter", "Adopted Son", "Stepdaughter", "Stepson",
+  "Maternal Grandmother", "Maternal Grandfather", "Paternal Grandmother", "Paternal Grandfather",
+  "Granddaughter", "Grandson",
+  "Aunt", "Uncle", "Niece", "Nephew", "Cousin",
+  "Partner", "Spouse",
 ];
 
 interface FamilyMember {
