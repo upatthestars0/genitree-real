@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export default function LoginPage() {
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
   const [email, setEmail] = useState(searchParams?.get("email") || "");
+  const next = searchParams?.get("next") || "/dashboard";
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
-    window.location.href = "/dashboard/family-tree";
+    window.location.href = next;
   }
 
   return (

@@ -41,7 +41,7 @@ export default function SignupPage() {
     }
 
     toast.success("Account created! Please sign in.");
-    window.location.href = `/auth/login?email=${encodeURIComponent(email)}`;
+    window.location.href = `/auth/login?email=${encodeURIComponent(email)}&next=/onboarding`;
   }
 
   return (

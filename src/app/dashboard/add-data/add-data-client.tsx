@@ -51,6 +51,26 @@ export default function AddDataClient({
   const [fileName, setFileName] = useState("");
   const [parsed, setParsed] = useState<ParsedData | null>(null);
   const [selectedMember, setSelectedMember] = useState<string>("self");
+  const [checkingEmail, setCheckingEmail] = useState(false);
+
+  async function handleCheckEmail() {
+    setCheckingEmail(true);
+    try {
+      const res = await fetch("/api/email/poll", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to check inbox");
+      if (data.count === 0) {
+        toast.info("No new medical emails found. Forward a document to your inbox with subject containing 'genitree'.");
+      } else {
+        toast.success(`${data.count} document${data.count > 1 ? "s" : ""} imported from email.`);
+        router.refresh();
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to check email");
+    } finally {
+      setCheckingEmail(false);
+    }
+  }
 
   async function handleFile(file: File) {
     const allowed = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
@@ -285,13 +305,19 @@ export default function AddDataClient({
         </div>
       )}
 
-      {/* Email forwarding note */}
-      <div className="flex items-start gap-3 rounded-xl border border-dashed bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-        <Mail className="mt-0.5 h-4 w-4 shrink-0" />
-        <p>
-          <span className="font-medium text-foreground">Coming soon:</span> Forward medical emails directly to{" "}
-          <span className="font-mono">data@genitree.com</span> and they&apos;ll be added here automatically.
-        </p>
+      {/* Email import */}
+      <div className="flex items-center justify-between gap-4 rounded-xl border bg-card px-4 py-3">
+        <div className="flex items-start gap-3">
+          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <div className="text-sm">
+            <p className="font-medium">Import from email</p>
+            <p className="text-muted-foreground">Forward a medical document to your inbox with <span className="font-mono text-xs">genitree</span> in the subject, then click check.</p>
+          </div>
+        </div>
+        <Button variant="outline" size="sm" onClick={handleCheckEmail} disabled={checkingEmail} className="shrink-0">
+          {checkingEmail ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : null}
+          {checkingEmail ? "Checking..." : "Check inbox"}
+        </Button>
       </div>
     </div>
   );
